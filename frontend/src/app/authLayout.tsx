@@ -66,28 +66,28 @@ export const AuthLayout: FC<{ children: React.ReactNode }> = ({ children }) => {
         return () => { };
     }, [activate, active, error, chainId]);
 
-    // useEffect(() => {
-    //     // setWeb(library);
-    //     // console.log("use Effect running for library change !!!!!", typeof library, "::::::::::loginIni::::::::", loginIni, "::::::::::userAcc:::::::::::::::", userAcc);
+    useEffect(() => {
+        // setWeb(library);
+        // console.log("use Effect running for library change !!!!!", typeof library, "::::::::::loginIni::::::::", loginIni, "::::::::::userAcc:::::::::::::::", userAcc);
 
-    //     if (loginIni && userAcc && library) {
-    //         // console.log("signin triggerd from librabry change ", userAcc, "active::::", active);
-    //         signin(userAcc, library);
-    //     }
-    //     if (loginIni && !userAcc) {
-    //         // console.log("dipatch for signout triggerd signOut ::::");
-    //         dispatch(signOut());
-    //     }
+        if (loginIni && userAcc && library) {
+            // console.log("signin triggerd from librabry change ", userAcc, "active::::", active);
+            signin(userAcc, library);
+        }
+        if (loginIni && !userAcc) {
+            // console.log("dipatch for signout triggerd signOut ::::");
+            dispatch(signOut());
+        }
 
-    // }, [userAcc, library]);
+    }, [userAcc, library]);
 
-    // useEffect(() => {
-    //     if (active && account) {
-    //         // alert(`meta mask active ${account}`)
-    //     }
-    //     //   console.log("loading ::::::::", loading);
-    //     //   console.log("state auth loading ::::::::", isLoading);
-    // }, [userAcc])
+    useEffect(() => {
+        if (active && account) {
+            // alert(`meta mask active ${account}`)
+        }
+        //   console.log("loading ::::::::", loading);
+        //   console.log("state auth loading ::::::::", isLoading);
+    }, [userAcc])
 
 
 
@@ -132,13 +132,13 @@ export const AuthLayout: FC<{ children: React.ReactNode }> = ({ children }) => {
     };
 
 
-    // useEffect(() => {
-    //     if (userData && authState == "SIGNED_IN" && !isLoading) {
-    //         !userData?.email && window.location.pathname !== "/onboarding"
-    //             ? setIsUserNotOnboarded(true)
-    //             : setIsUserNotOnboarded(false);
-    //     }
-    // }, [authState, userData]);
+    useEffect(() => {
+        if (userData && authState == "SIGNED_IN" && !isLoading) {
+            !userData?.email && window.location.pathname !== "/onboarding"
+                ? setIsUserNotOnboarded(true)
+                : setIsUserNotOnboarded(false);
+        }
+    }, [authState, userData]);
 
     // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
     const triedEager = useEagerConnect();
@@ -146,40 +146,40 @@ export const AuthLayout: FC<{ children: React.ReactNode }> = ({ children }) => {
     useInactiveListener(!triedEager);
 
     /* Checking if the user is authenticated or not */
-    // useEffect(() => {
-    //     if (authState === null && triedEager) {
-    //         dispatch(updateCurrentAuthUser({ authStatePending: true, signer: library }));
-    //     }
+    useEffect(() => {
+        if (authState === null && triedEager) {
+            dispatch(updateCurrentAuthUser({ authStatePending: true, signer: library }));
+        }
 
-    //     /* updating user data on token update in localstorage */
-    //     window.addEventListener("storage", (event) => {
-    //         if (CurrentToken.storageKey === event.key) {
-    //             dispatch(updateUserDataOnTokenUpdate());
-    //         }
-    //     });
-    // }, [triedEager]);
+        /* updating user data on token update in localstorage */
+        window.addEventListener("storage", (event) => {
+            if (CurrentToken.storageKey === event.key) {
+                dispatch(updateUserDataOnTokenUpdate());
+            }
+        });
+    }, [triedEager]);
 
-    // useEffect(() => {
-    //     /* if user is not verified than redirect him to signup page to verify himself with the verification code */
-    //     if (isUserNotOnboarded) {
-    //         router.push('/onboarding');
-    //     }
-    // }, [authState, userData, isUserNotOnboarded]);
+    useEffect(() => {
+        /* if user is not verified than redirect him to signup page to verify himself with the verification code */
+        if (isUserNotOnboarded) {
+            router.push('/onboarding');
+        }
+    }, [authState, userData, isUserNotOnboarded]);
 
     /* checking if the user has changed or disconnect his account it should be logout */
-    // useEffect(() => {
-    //     // !chainId && listenChainChangeEvent();
-    //     if (!userData?.publicAddress || authState === "PENDING" || !account) {
-    //         return;
-    //     }
-    //     if (account?.toLocaleLowerCase() !== userData.publicAddress.toLocaleLowerCase()) {
-    //         // console.log("metamask account ===>", account?.toLocaleLowerCase());
-    //         // console.log("login user account ===>", userData.authData.publicAddress.toLocaleLowerCase());
-    //         console.log("========= signing out =========");
-    //         dispatch(signOut());
-    //     }
+    useEffect(() => {
+        // !chainId && listenChainChangeEvent();
+        if (!userData?.publicAddress || authState === "PENDING" || !account) {
+            return;
+        }
+        if (account?.toLocaleLowerCase() !== userData.publicAddress.toLocaleLowerCase()) {
+            // console.log("metamask account ===>", account?.toLocaleLowerCase());
+            // console.log("login user account ===>", userData.authData.publicAddress.toLocaleLowerCase());
+            console.log("========= signing out =========");
+            dispatch(signOut());
+        }
 
-    // }, [account, userData]);
+    }, [account, userData]);
 
     /* setting contract in redux state */
     // useEffect(() => {
@@ -192,16 +192,9 @@ export const AuthLayout: FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <LayoutWrapper>
             <div aria-label="body" className="max-w-full my-0 mx-auto">
-                {/* {authState === "PENDING" || authState === null ? (
-                    <svg aria-label='Loading' className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24" /> :
-                    <div className="flex justify-center items-center h-56" >
-                        <Spinner color="primary" />
-                    </div>
-                ) : isUserNotOnboarded ? (
-                    <div />
-                ) : ( */}
-                {children}
-                {/* )} */}
+
+                {(authState === "PENDING" || authState === null) ? (<svg aria-label='Loading' className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24" />) : isUserNotOnboarded ? <div /> : <React.Fragment>{children}</React.Fragment>}
+                
             </div>
         </LayoutWrapper>
     );
